@@ -4,6 +4,7 @@ var fs = require("fs"),
     theport = process.env.PORT || 3000,
     twitter = require("ntwitter");
 
+io.set('heartbeats', false);
 app.listen(theport);
 console.log ("http server on port: " + theport);
 
@@ -16,54 +17,46 @@ var tw = new twitter({
     consumer_secret     : "c8todcqVU2w5Fk51Qk0aLukvyIwGJ1V4x4NLpTKGq9TEyLWc1f",
     access_token_key    : "2478411144-b08QFN42lFhe8INmBIpmob74OefFGS85uAeI29j",
     access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
-}),
-track,
-users = [];
+}), users = [], nbTweets = 0;
 
 
 
-var track = 'a,e,i,o,u,y';
+var track = 'elysée';
 
-
-io.sockets.on("connection", function(socket) {
-
-    if (users.indexOf(socket.id) === -1) {
+io.sockets.on("connection", function(socket)
+{
+    if (users.indexOf(socket.id) === -1)
         users.push(socket.id);
-    }
 
-    socket.on("disconnect", function(o) {
 
+    logConnectedUsers();
+
+    socket.on("disconnect", function(o)
+    {
         var index = users.indexOf(socket.id);
-        if(index != -1) {
+        if(index != -1)
             users.splice(index, 1);
-        }
-        logConnectedUsers();
     });
 });
 
 tw.stream("statuses/filter",
 {
     track: track
-}, function(s)
+},
+function(stream)
 {
-    s.on("data", function(data)
+    stream.on("data", function(data)
     {
-
-        tw.get('https://api.twitter.com/1.1/application/rate_limit_status.json', function(data)
-        {
-            console.log(data);
-        });
-
+        nbTweets++;
+        console.log(nbTweets);
         io.sockets.emit('new tweet', data);
     });
 
-
-    s.on('error', function(error)
+    stream.on('error', function(error)
     {
         console.log(error);
     });
 });
-
 
 
 logConnectedUsers();
@@ -75,9 +68,6 @@ function resolveLocation(location)
         console.log(data);
     });
 }
-
-
-
 
 function logConnectedUsers() {
     console.log("============= CONNECTED USERS ==============");
