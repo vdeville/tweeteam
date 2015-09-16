@@ -9,17 +9,31 @@ console.log ("http server on port: " + theport);
 
 function handler (req, res) {
 
-    res.end('test');
 }
 
 var tw = new twitter({
-        consumer_key: "",
-        consumer_secret: "",
-        access_token_key: "",
-        access_token_secret: ""
-    }),
-    track,
-    users = [];
+    consumer_key        : "O4Hhtf1mTUfCMmICOGNcLPP9X",
+    consumer_secret     : "c8todcqVU2w5Fk51Qk0aLukvyIwGJ1V4x4NLpTKGq9TEyLWc1f",
+    access_token_key    : "2478411144-b08QFN42lFhe8INmBIpmob74OefFGS85uAeI29j",
+    access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
+}),
+track,
+users = [];
+
+
+var track = 'journee hackathon banzai';
+tw.stream("statuses/filter",
+{
+    track: track
+}, function(s)
+{
+    s.on("data", function(data)
+    {
+
+    });
+
+});
+
 
 io.sockets.on("connection", function(socket)
 {
@@ -29,36 +43,6 @@ io.sockets.on("connection", function(socket)
     }
 
     logConnectedUsers();
-
-    socket.on("start stream", function(t) {
-        socket.stream = null;
-        var track = t;
-        if(socket.stream === null)
-        {
-            tw.stream("statuses/filter",
-            {
-                track: track
-            }, function(s)
-             {
-                socket.stream = s;
-                socket.stream.on("data", function(data) {
-
-                    if(users.length > 0) {
-
-                        socket.emit("new tweet", data);
-                    }
-                    else if(socket.stream)
-                    {
-                        socket.stream.destroy();
-                        socket.stream = null;
-                    }
-                });
-                socket.stream.on('error', function(error, code) {
-                    console.log("Error: " + error + ": " + code);
-                });
-             });
-        }
-    });
 
     function resolveLocation(location)
     {
@@ -76,8 +60,6 @@ io.sockets.on("connection", function(socket)
         }
         logConnectedUsers();
     });
-
-    socket.emit("connected");
 });
 
 function logConnectedUsers() {
