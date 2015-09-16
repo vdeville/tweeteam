@@ -21,35 +21,14 @@ track,
 users = [];
 
 
-var track = 'journee hackathon banzai';
-tw.stream("statuses/filter",
-{
-    track: track
-}, function(s)
-{
-    s.on("data", function(data)
-    {
 
-    });
-
-});
+var track = 'a,e,i,o,u,y';
 
 
-io.sockets.on("connection", function(socket)
-{
+io.sockets.on("connection", function(socket) {
 
-    if(users.indexOf(socket.id) === -1) {
+    if (users.indexOf(socket.id) === -1) {
         users.push(socket.id);
-    }
-
-    logConnectedUsers();
-
-    function resolveLocation(location)
-    {
-        tw.get('https://api.twitter.com/1.1/geo/id/df51dec6f4ee2b2c.json', {'place_id': location}, function(data)
-        {
-            console.log(data);
-        })
     }
 
     socket.on("disconnect", function(o) {
@@ -61,6 +40,44 @@ io.sockets.on("connection", function(socket)
         logConnectedUsers();
     });
 });
+
+tw.stream("statuses/filter",
+{
+    track: track
+}, function(s)
+{
+    s.on("data", function(data)
+    {
+
+        tw.get('https://api.twitter.com/1.1/application/rate_limit_status.json', function(data)
+        {
+            console.log(data);
+        });
+
+        io.sockets.emit('new tweet', data);
+    });
+
+
+    s.on('error', function(error)
+    {
+        console.log(error);
+    });
+});
+
+
+
+logConnectedUsers();
+
+function resolveLocation(location)
+{
+    tw.get('https://api.twitter.com/1.1/geo/id/df51dec6f4ee2b2c.json', {'place_id': location}, function(data)
+    {
+        console.log(data);
+    });
+}
+
+
+
 
 function logConnectedUsers() {
     console.log("============= CONNECTED USERS ==============");
