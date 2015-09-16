@@ -1,3 +1,4 @@
-/**
- * Created by permis_ on 16/09/2015.
- */
+new Twitter('localhost:3000', function(tweet)
+{
+    console.log(tweet);
+});
