@@ -1,7 +1,10 @@
-<div class="tweet">
+<div class="tweet animated {{animation}}">
     <div class="tweet_user">
-        <a href="http://twitter.com/{{user.screen_name}}">@{{user.screen_name}}</a>
+        <a href="http://twitter.com/{{screen_name}}" target="blank">@{{screen_name}}</a>
+        <ul class="tweet_share">
+            <li><a href="https://twitter.com/intent/retweet?tweet_id={{id}}" target="_blank"><i class="fa fa-retweet" data-toggle="tooltip" title="Retweeter" ></i></a></li>
+        </ul>
     </div>
-    <div class="tweet_date" title="{{created_at}}"></div>
-    <div class="tweet_text">{{text}}</div>
+    <div class="tweet_date">{{created_at}}</div>
+    <div class="tweet_text">{{{text}}}</div>
 </div>
