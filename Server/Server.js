@@ -4,7 +4,6 @@ var fs = require("fs"),
     theport = process.env.PORT || 3000,
     twitter = require("ntwitter");
 
-io.set('heartbeats', false);
 app.listen(theport);
 console.log ("http server on port: " + theport);
 
@@ -21,7 +20,7 @@ var tw = new twitter({
 
 
 
-var track = 'elysée';
+var track = 'a';
 
 io.sockets.on("connection", function(socket)
 {
@@ -45,11 +44,17 @@ tw.stream("statuses/filter",
 },
 function(stream)
 {
+
     stream.on("data", function(data)
     {
         nbTweets++;
-        console.log(nbTweets);
-        io.sockets.emit('new tweet', data);
+        io.sockets.emit('new tweet',
+        {
+            id: data.id_str,
+            text: data.text,
+            created_at: data.created_at,
+            screen_name: data.user.screen_name
+        });
     });
 
     stream.on('error', function(error)
@@ -57,9 +62,6 @@ function(stream)
         console.log(error);
     });
 });
-
-
-logConnectedUsers();
 
 function resolveLocation(location)
 {
