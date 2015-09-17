@@ -2,8 +2,7 @@ var fs = require("fs"),
     app = require("http").createServer(handler),
     io = require("socket.io").listen(app, { log: false }),
     theport = process.env.PORT || 3000;
-
-
+    var tweeter = require('ntwitter');
 app.listen(theport);
 console.log ("http server on port: " + theport);
 
@@ -13,7 +12,7 @@ function handler (req, res) {
 
 
 var Stream = require('user-stream');
-var twitter = new Stream({
+var twitter = new tweeter({
     consumer_key        : "O4Hhtf1mTUfCMmICOGNcLPP9X",
     consumer_secret     : "c8todcqVU2w5Fk51Qk0aLukvyIwGJ1V4x4NLpTKGq9TEyLWc1f",
     access_token_key    : "2478411144-b08QFN42lFhe8INmBIpmob74OefFGS85uAeI29j",
@@ -38,24 +37,39 @@ io.sockets.on("connection", function(socket)
 });
 
 
-twitter.stream(
+twitter.stream('statuses/filter',
 {
-    with: 'fhollande, elysee, vir4x, elysee_com'
-});
-
-twitter.on('data', function(data)
+    follow:
+    [
+        18814998,
+        16717501,
+        1464243415
+    ]
+},
+function(stream)
 {
-    console.log(data);
-    nbTweets++;
-    io.sockets.emit('new tweet',
+    stream.on('data', function(data)
     {
-        id: data.id_str,
-        text: data.text,
-        created_at: data.created_at,
-        screen_name: data.user.screen_name,
-        place: data.place
+        nbTweets++;
+
+        var image = null;
+        if(typeof data.extended_entities !== 'undefined')
+            if(data.extended_entities.media.length > 0)
+                image = data.extended_entities.media[0].media_url;
+
+        io.sockets.emit('new tweet',
+        {
+            image       : image,
+            id          : data.id_str,
+            text        : data.text,
+            created_at  : data.created_at,
+            screen_name : data.user.screen_name,
+            place       : data.place
+        });
     });
 });
+
+
 
 function logConnectedUsers() {
     console.log("============= CONNECTED USERS ==============");
