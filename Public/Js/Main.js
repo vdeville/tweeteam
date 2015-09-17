@@ -15,6 +15,10 @@ $(function($)
         {
             new Twitter('10.101.0.66:3000', function(tweet)
             {
+
+                console.log(tweet);
+                console.log(tweet.data);
+
                 var scroll = $(window).scrollTop();
                 if(scroll > 0)
                 {
@@ -81,10 +85,10 @@ $(function($)
                     tweet.animation = randomAnimations[~~(Math.random() * randomAnimations.length)];
                     tweet.text = parseUrls(tweet.text);
 
+
+
                     if(tweet.place)
                     {
-
-
                         var coord =
                         {
                             longitude: tweet.place.bounding_box.coordinates[0][0][0],
@@ -136,7 +140,7 @@ $(function($)
         function parseUrls(text)
         {
             if(text.length && typeof text !== 'undefined')
-                return text.replace(/(https?:\/\/[^\s]+)/g, function(url)
+                return text.replace(/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, function(url)
                 { return '<a href="' + url + '" target="blank">' + url + '</a>'; });
         }
 
