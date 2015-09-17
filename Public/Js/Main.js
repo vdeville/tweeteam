@@ -8,12 +8,12 @@ $(function($)
         var newTweets     = 0;
         var tweets        = [];
         var current       = 0;
-        var flow_rate     = 1000;
+        var flow_rate     = 2500;
         var limit         = 20;
 
         $.get('Templates/tweet.html', function(template)
         {
-            new Twitter('localhost:3000', function(tweet)
+            new Twitter('10.101.0.66:3000', function(tweet)
             {
                 var scroll = $(window).scrollTop();
                 if(scroll > 0)
