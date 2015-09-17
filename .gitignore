@@ -1,0 +1,6 @@
+/vendor/
+.idea/
+.*
+!/.gitignore
+composer.lock
+Server/node_modules/

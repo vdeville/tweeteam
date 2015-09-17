@@ -1,0 +1,80 @@
+#tweet_list
+{
+    width: 590px;
+    margin: 0px auto;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+#tweet_header
+{
+    width: 590px;
+    height: 36px;
+    margin: 0 auto;
+    background-color: #dc372d;
+    color: white;
+    -webkit-box-shadow: 0 -1px 0 0 #e56962 inset, 0 -2px 0 0 #de453b inset;
+    -moz-box-shadow: 0 -1px 0 0 #e56962 inset, 0 -2px 0 0 #de453b inset;
+    box-shadow: 0 -1px 0 0 #e56962 inset, 0 -2px 0 0 #de453b inset;
+}
+    .tweet_header_logo
+    {
+        width: 10%;
+        height: 100%;
+        float: left;
+    }
+    .tweet_header_text
+    {
+        width: 80%;
+        height: 100%;
+        float: left;
+        font-size: 1.53846em;
+        line-height: 1.8em;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        color: white;
+        text-transform: capitalize;
+        font-family: Georgia, serif;
+    }
+    .tweet_header_follow
+    {
+        float: left;
+        width: 10%;
+        height: 100%;
+    }
+
+.tweet
+{
+    padding: 15px;
+    box-shadow: inset 0 0 20px 1px rgba(0,0,0,0.05);
+}
+    .tweet_border_bottom
+    {
+        border-bottom: 1px solid #eee;
+    }
+    .tweet .tweet_user
+    {
+
+    }
+    .tweet .tweet_date
+    {
+        color: #ccc;
+    }
+    .tweet .tweet_text
+    {
+
+    }
+
+    ul.tweet_share
+    {
+        list-style-type: none;
+        margin: 0;
+        padding:0;
+        float:right;
+    }
+
+    ul.tweet_share li a
+    {
+        color: #ccc;
+    }
