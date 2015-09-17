@@ -1,3 +1,4 @@
+<div id="map_svg"></div>
 <div id="tweet_header">
     <div class="tweet_header_logo"></div>
     <div class="tweet_header_text">Twitter Live</div>
