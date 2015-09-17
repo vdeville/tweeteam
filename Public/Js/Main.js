@@ -8,8 +8,8 @@ $(function($)
         var newTweets     = 0;
         var tweets        = [];
         var current       = 0;
-        var flow_rate     = 2800;
-        var limit         = 50;
+        var flow_rate     = 1000;
+        var limit         = 20;
 
         $.get('Templates/tweet.html', function(template)
         {
@@ -41,9 +41,46 @@ $(function($)
                 }
                 else if(waitingTweets.length == 0)
                 {
-                    var randomAnimations = ['bounceInDown', 'bounceInLeft', 'bounceInRight'];
+                    var randomAnimations =
+                    [
+                        'bounceIn',
+                        'bounceInDown',
+                        'bounceInLeft',
+                        'bounceInRight',
+                        'bounceInUp',
+
+                        'fadeIn',
+                        'fadeInDown',
+                        'fadeInDownBig',
+                        'fadeInLeft',
+                        'fadeInRight',
+                        'fadeInRightBig',
+                        'fadeInUp',
+                        'fadeInUpBig',
+
+                        'rotateIn',
+                        'rotateInDownLeft',
+                        'rotateInDownRight',
+                        'rotateInUpLeft',
+                        'rotateInUpRight',
+
+                        'slideInUp',
+                        'slideInDown',
+                        'slideInLeft',
+                        'slideInRight',
+
+                        'zoomIn',
+                        'zoomInDown',
+                        'zoomInLeft',
+                        'zoomInRight',
+                        'zoomInUp',
+
+                        'rollIn'
+                    ];
+
                     tweet.animation = randomAnimations[~~(Math.random() * randomAnimations.length)];
                     tweet.text = parseUrls(tweet.text);
+
                     if(tweet.place)
                     {
 
@@ -109,9 +146,9 @@ $(function($)
             {
 
                 $('#tweet_list').prepend(tweets[current]);
-                $(".tweet:not(:first)").animate({'margin-top': $('.tweet').first().height()/2});
+                $(".tweet:not(:first)").animate({'margin-top': 0});
+                $('.tweet').css('margin-top', '0px');
                 $('.tweet').first().animate({'opacity': 1});
-                $('.tweet').css('margin', 0);
                 $('#tweet_list .tweet').first().addClass('tweet_border_bottom');
                 var count = $('#tweet_list .tweet').length;
                 if (count > limit) $('#tweet_list .tweet:last-child').remove();
