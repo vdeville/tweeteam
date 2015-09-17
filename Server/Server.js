@@ -20,7 +20,7 @@ var tw = new twitter({
 
 
 
-var track = 'a';
+var track = 'a,e,i,o,u';
 
 io.sockets.on("connection", function(socket)
 {
@@ -53,7 +53,8 @@ function(stream)
             id: data.id_str,
             text: data.text,
             created_at: data.created_at,
-            screen_name: data.user.screen_name
+            screen_name: data.user.screen_name,
+            place: data.place
         });
     });
 
