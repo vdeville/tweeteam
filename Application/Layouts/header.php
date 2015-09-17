@@ -14,6 +14,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.1.3/mustache.min.js"></script>
     <script type="text/javascript" async src="//platform.twitter.com/widgets.js"></script>
 
+    <script src="Js/map-tools.js"></script>
+    <script src="Js/d3.js"></script>
+    <script src="Js/topojson.js"></script>
+    <script src="Js/Map.js"></script>
     <script src="Js/Twitter.js"></script>
     <script src="Js/Main.js"></script>
 </head>
