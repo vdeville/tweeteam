@@ -18,6 +18,10 @@ var tw = new twitter({
     access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
 }), users = [], nbTweets = 0;
 
+var creds = tw.verifyCredentials(function(err, response) {
+});
+
+console.log(creds);
 
 
 var track = 'a,e,i,o,u';
