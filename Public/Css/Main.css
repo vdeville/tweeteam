@@ -6,6 +6,7 @@ body
     padding: 0;
 }
 
+
 #tweet_list
 {
     width: 590px;
@@ -30,6 +31,9 @@ body
     width: 10%;
     height: 100%;
     float: left;
+    background-image: url('../Img/twitter.png');
+    background-repeat: no-repeat;
+    background-position: 3px center;
 }
 .tweet_header_text
 {
@@ -63,9 +67,10 @@ body
 {
     border-bottom: 1px solid #eee;
 }
-.tweet .tweet_user
+.tweet .tweet_user a
 {
-
+    font-weight: 600;
+    color: #2F374B;
 }
 .tweet .tweet_date
 {
@@ -86,7 +91,7 @@ ul.tweet_share
 
 ul.tweet_share li a
 {
-    color: #ccc;
+    color: #ccc!important;
 }
 
 
