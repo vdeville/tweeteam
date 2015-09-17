@@ -4,13 +4,14 @@
       xml:lang="fr" lang="fr" xmlns:fb="http://www.facebook.com/2008/fbml"
       xmlns:og="http://opengraphprotocol.org/schema/">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- include head -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- meta name="viewport" content="width=1024" /-->
 
 
-    <title>Entretien avec une délégation de représentants économiques d’Outre-mer - Présidence de la République</title>
+    <title>Démo - Présidence de la République</title>
     <meta name="title" content="Entretien avec une délégation de représentants économiques d’Outre-mer">
 
     <link rel="canonical" href="index_files/index.html">
@@ -741,10 +742,6 @@
                         <p class="fields">
                             <input type="search" id="search-input-header" value="" name="input-search"
                                    title="Saisissez votre recherche" class="search-input">
-                            <button type="submit" class="search-submit" title="Valider la recherche sur le site"><img
-                                    src="index_files/search.png" class="retina"
-                                    data-retina="elysee/images/icon/search-big.png" width="18" height="36"
-                                    alt="Valider la recherche sur le site"></button>
                         </p>
                     </form>
                 </div>
@@ -765,6 +762,7 @@
             white-space:nowrap;
             font-family: Arial;
             padding: 0 0 0 12px;
+            position: relative;
         }
         .player-video{
             background-image: url('http://s.tf1.fr/mmdia/i/26/0/francois-hollande-discours-blois-emploi-10873260hdkig_1713.jpg?v=1');
@@ -787,10 +785,9 @@
         .tweet-sidebar{
             height: 612px;
             width: 100%;
-            background: #000000;
+            background: #fff;
         }
         .img-custom{
-
             line-height: 50px;
             display: inline-block;
             height: 50px;
@@ -799,7 +796,7 @@
             margin-top: -4px;
         }
         .barre_bas{
-            background: #232222;
+            background: linear-gradient(to bottom, #4f4e4e 0%,#232222 50%);
             text-align: center;
             height: 100px;
             margin-top: 12px;
@@ -815,6 +812,12 @@
         }
         .barre_bas ul li .fa{
             color: #0b97c4;
+        }
+        .titre-custom{
+            margin-top: -25px;
+            margin-left: 150px;
+            font-family: Georgia;
+            font-size: 20px;
         }
     </style>
     <div id="content" role="main">
@@ -879,6 +882,9 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="barre-haut">
+                        <div style="position: absolute; font-size: 30px; left: 400px; top: 50%; margin-left: -400px;">
+                            <p class="titre-custom">Live - Demo Hackathon Elysée 2015</p>
+                        </div>
                         <img src="Direct.png" class="img-custom">
                     </div>
                     <div class="player-video">
@@ -896,7 +902,20 @@
                     <div class="tweet-sidebar-header">
                         <p><i class="fa fa-twitter" style="color: white; margin-right: 15px"></i>Twitter</p>
                     </div>
-                    <div class="tweet-sidebar"></div>
+                    <div class="tweet-sidebar">
+
+                        <a data-chrome="transparent nofooter noborders noheader noscrollbar" class="twitter-timeline" href="https://twitter.com/MyTheValentinus/lists/hackathonelyseetest" data-widget-id="644532388563918848"></a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                        <script>
+                            $( document ).ready(function() {
+
+                                console.log( "ready!" );
+                                var x = $(".dt-updated");
+                                x.hide();
+                            });
+                        </script>
+
+                    </div>
                 </div>
             </div>
         </div>
