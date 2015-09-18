@@ -13,6 +13,8 @@ body
     border-right: 1px solid #eee;
     max-height: 600px;
     overflow-y: scroll;
+    width: 590px;
+    margin: 0 auto;
 }
 
 #tweet_header
