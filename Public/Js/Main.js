@@ -9,7 +9,7 @@ $(function($)
         var tweets           = [];
         var current          = 0;
         var flow_rate        = 1000;
-        var limit            = 20;
+        var limit            = 100;
         var randomAnimations = [ 'fadeInDown'];
 
         $.get('../Templates/tweet.html', function(template)
@@ -34,10 +34,6 @@ $(function($)
 
             function addTweet(tweet, template)
             {
-
-                console.log(tweet);
-                console.log(tweet.data);
-
                 var scroll = $(window).scrollTop();
                 if(scroll > 0)
                 {
