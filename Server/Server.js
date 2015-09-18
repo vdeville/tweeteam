@@ -30,6 +30,9 @@ twitter.init(
 
 twitter.getLastTweets(tracks, function(lastTweets)
 {
+    lastTweets.sort(function(a, b)
+    { return new Date(b.created_at) - new Date(a.created_at); });
+
     twitter.stream(tracks, function(tweet)
     {
         io.sockets.emit('new tweet',
