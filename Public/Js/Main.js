@@ -12,13 +12,13 @@ $(function($)
         var limit            = 100;
         var randomAnimations = [ 'fadeInDown'];
 
-        $.get('../Templates/tweet.html', function(template)
+        $.get('Templates/tweet.html', function(template)
         {
             new Twitter('localhost:3000', function(type, data)
             {
                 if(type == 'history')
                     showHistory(data, template);
-                else if(type == 'new')
+                if(type == 'new')
                     addTweet(data, template);
             });
 
@@ -39,7 +39,7 @@ $(function($)
                 {
                     newTweets++;
                     waitingTweets.push(tweet);
-                    $.get('Templates/waitingTweets.html', function(waiting_tpl)
+                    $.get('../Templates/waitingTweets.html', function(waiting_tpl)
                     {
                         var sentence = 'Voir '+newTweets+' nouveau'+(newTweets>1?'x':'')+' tweet'+(newTweets>1?'s':'');
                         if($('#waitingTweets').length > 0)
@@ -119,10 +119,12 @@ $(function($)
                     $('#tweet_list .tweet').first().addClass('tweet_border_bottom');
                     var count = $('#tweet_list .tweet').length;
                     if (count > limit) $('#tweet_list .tweet:last-child').remove();
+
                     current++;
                     tweets.shift();
                     $('[data-toggle="tooltip"]').tooltip();
                 }
+                else current = 0;
             }, flow_rate);
         });
     });
