@@ -4,6 +4,7 @@ app       = require('http').createServer(),
 io        = require('socket.io').listen(app),
 port      = process.env.PORT || 3000,
 twitter   = require('./TweetLib.js');
+config    = require('./Config.js');
 
 var Datastore = require('nedb'),
 db        = new Datastore(
@@ -21,13 +22,7 @@ tracks   =
 ];
 
 app.listen(port);
-twitter.init(
-{
-    consumer_key        : "O4Hhtf1mTUfCMmICOGNcLPP9X",
-    consumer_secret     : "c8todcqVU2w5Fk51Qk0aLukvyIwGJ1V4x4NLpTKGq9TEyLWc1f",
-    access_token_key    : "2478411144-b08QFN42lFhe8INmBIpmob74OefFGS85uAeI29j",
-    access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
-}, db);
+twitter.init(config, db);
 
 var refreshHistory = 0;
 twitter.getLastTweets(tracks, function()
