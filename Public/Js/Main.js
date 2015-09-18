@@ -12,7 +12,7 @@ $(function($)
         var limit            = 100;
         var randomAnimations = [ 'fadeInDown'];
 
-        $.get('Templates/tweet.html', function(template)
+        $.get('../Templates/tweet.html', function(template)
         {
             new Twitter('localhost:3000', function(type, data)
             {
