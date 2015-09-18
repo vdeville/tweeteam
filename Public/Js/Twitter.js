@@ -12,13 +12,17 @@ Twitter.prototype.init = function(callback)
 {
     var that = this;
     this.socket = io.connect(this.host);
+    this.socket.on('tweets history', function(lastTweets)
+    {
+        callback('history', lastTweets);
+    });
+
     this.socket.on('new tweet', function(data)
     {
-        if(data.created_at)
-            data.created_at = that.parseDate(data.created_at);
-        callback(data);
+        callback('new', data);
     });
 };
+
 
 Twitter.prototype.parseDate = function(tdate)
 {
