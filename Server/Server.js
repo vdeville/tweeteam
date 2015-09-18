@@ -28,9 +28,14 @@ twitter.init(
     access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
 }, db);
 
+var history = [];
+
 twitter.getLastTweets(tracks, function(lastTweets)
 {
-    lastTweets.sort(function(a, b)
+    for(var l in lastTweets)
+        history.push(lastTweets[l]);
+
+    history.sort(function(a, b)
     { return new Date(b.created_at) - new Date(a.created_at); });
 
     twitter.stream(tracks, function(tweet)
@@ -50,7 +55,7 @@ twitter.getLastTweets(tracks, function(lastTweets)
         if (users.indexOf(socket.id) === -1)
             users.push(socket.id);
 
-        socket.emit('tweets history', lastTweets);
+        socket.emit('tweets history', history);
         logConnectedUsers();
 
         socket.on("disconnect", function(o)
