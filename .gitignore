@@ -4,3 +4,4 @@
 !/.gitignore
 composer.lock
 Server/node_modules/
+Server/tweets.db
