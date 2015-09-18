@@ -22,6 +22,12 @@ tracks   =
 ];
 
 app.listen(port);
+
+// Config.js object structure
+// consumer_key
+// consumer_secret
+// access_token_secret
+// access_token_key
 twitter.init(config, db);
 
 var refreshHistory = 0;
