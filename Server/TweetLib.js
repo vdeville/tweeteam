@@ -1,4 +1,4 @@
-var TweetLib = function(db)
+var TweetLib = function()
 {
     this.instance = null;
 };
