@@ -1,82 +1,66 @@
-var fs = require("fs"),
-    app = require("http").createServer(handler),
-    io = require("socket.io").listen(app, { log: false }),
-    theport = process.env.PORT || 3000,
-    twitter = require("ntwitter");
+var
+fs        = require('fs'),
+app       = require('http').createServer(),
+io        = require('socket.io').listen(app),
+port      = process.env.PORT || 3000,
+twitter   = require('./TweetLib.js');
 
-app.listen(theport);
-console.log ("http server on port: " + theport);
+var Datastore = require('nedb'),
+db        = new Datastore(
+{
+    filename: 'tweets.db',
+    autoload: true
+}),
+users    = [],
+tracks   =
+[
+    {screen_name: 'fhollande',  count: 15},
+    {screen_name: 'elysee',     count: 15},
+    {screen_name: 'elysee_com', count: 15}
+];
 
-function handler (req, res) {
-
-}
-
-var tw = new twitter({
+app.listen(port);
+twitter.init(
+{
     consumer_key        : "O4Hhtf1mTUfCMmICOGNcLPP9X",
     consumer_secret     : "c8todcqVU2w5Fk51Qk0aLukvyIwGJ1V4x4NLpTKGq9TEyLWc1f",
     access_token_key    : "2478411144-b08QFN42lFhe8INmBIpmob74OefFGS85uAeI29j",
     access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
-}), users = [], nbTweets = 0;
+}, db);
 
-var creds = tw.verifyCredentials(function(err, response) {
-});
-
-console.log(creds);
-
-
-var track = 'a,e,i,o,u';
-
-io.sockets.on("connection", function(socket)
+twitter.getLastTweets(tracks, function(lastTweets)
 {
-    if (users.indexOf(socket.id) === -1)
-        users.push(socket.id);
-
-
-    logConnectedUsers();
-
-    socket.on("disconnect", function(o)
+    twitter.stream(tracks, function(tweet)
     {
-        var index = users.indexOf(socket.id);
-        if(index != -1)
-            users.splice(index, 1);
-    });
-});
-
-tw.stream("statuses/filter",
-{
-    track: track
-},
-function(stream)
-{
-
-    stream.on("data", function(data)
-    {
-        nbTweets++;
         io.sockets.emit('new tweet',
         {
-            id: data.id_str,
-            text: data.text,
-            created_at: data.created_at,
-            screen_name: data.user.screen_name,
-            place: data.place
+            id          : tweet.id_str,
+            text        : tweet.text,
+            created_at  : tweet.created_at,
+            user        : {screen_name : tweet.user.screen_name},
+            place       : tweet.place
         });
     });
 
-    stream.on('error', function(error)
+    io.sockets.on("connection", function(socket)
     {
-        console.log(error);
+        if (users.indexOf(socket.id) === -1)
+            users.push(socket.id);
+
+        socket.emit('tweets history', lastTweets);
+        logConnectedUsers();
+
+        socket.on("disconnect", function(o)
+        {
+            var index = users.indexOf(socket.id);
+            if(index != -1)
+                users.splice(index, 1);
+        });
     });
 });
 
-function resolveLocation(location)
+function logConnectedUsers()
 {
-    tw.get('https://api.twitter.com/1.1/geo/id/df51dec6f4ee2b2c.json', {'place_id': location}, function(data)
-    {
-        console.log(data);
-    });
-}
-
-function logConnectedUsers() {
     console.log("============= CONNECTED USERS ==============");
     console.log("==  ::  " + users.length);
     console.log("============================================");
