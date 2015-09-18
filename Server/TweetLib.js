@@ -23,10 +23,9 @@ TweetLib.prototype.getLastTweets = function(tracks, callback)
         function(err, data)
         {
             if(data.length > 0)
-                for(var tweet in data)
-                    that.db.insert(data[tweet]);
+                that.db.insert(data);
 
-            callback(data);
+            callback();
         });
     }
 };
@@ -34,6 +33,7 @@ TweetLib.prototype.getLastTweets = function(tracks, callback)
 
 TweetLib.prototype.stream = function(tracks, callback)
 {
+    var that = this;
     var names = [];
     for(var t in tracks) names.push(tracks[t].screen_name);
 
@@ -46,8 +46,13 @@ TweetLib.prototype.stream = function(tracks, callback)
         stream.on('data', function(data)
         {
             if(typeof data.user !== 'undefined')
+            {
                 if(names.indexOf(data.user.screen_name) !== -1)
+                {
+                    that.db.insert(data);
                     callback(data);
+                }
+            }
         });
 
         stream.on('error', function(error)
