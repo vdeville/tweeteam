@@ -34,6 +34,10 @@ $(function($)
 
             function addTweet(tweet, template)
             {
+
+                console.log(tweet);
+                console.log(tweet.data);
+
                 var scroll = $(window).scrollTop();
                 if(scroll > 0)
                 {

@@ -7,7 +7,9 @@
     "nedb": "^1.2.0",
     "ntwitter": "^0.5.0",
     "socket.io": "^1.3.6",
-    "socket.io-client": "^1.3.6"
+    "socket.io-client": "^1.3.6",
+
+  "user-stream": "0.0.7"
   },
   "devDependencies": {},
   "scripts": {
