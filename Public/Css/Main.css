@@ -9,10 +9,10 @@ body
 
 #tweet_list
 {
-    width: 590px;
-    margin: 0px auto;
     border-left: 1px solid #eee;
     border-right: 1px solid #eee;
+    max-height: 600px;
+    overflow-y: scroll;
 }
 
 #tweet_header
