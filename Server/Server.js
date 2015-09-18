@@ -16,7 +16,8 @@ tracks   =
 [
     {screen_name: 'fhollande',  count: 15},
     {screen_name: 'elysee',     count: 15},
-    {screen_name: 'elysee_com', count: 15}
+    {screen_name: 'elysee_com', count: 15},
+    {screen_name: 'vir4x',      count: 15}
 ];
 
 app.listen(port);
@@ -28,43 +29,47 @@ twitter.init(
     access_token_secret : "SxSCqKIjMRoJKsbH4lSd1ikETe8I9PO8kpl2GiGnifw0Y"
 }, db);
 
-var history = [];
-
-twitter.getLastTweets(tracks, function(lastTweets)
+var refreshHistory = 0;
+twitter.getLastTweets(tracks, function()
 {
-    for(var l in lastTweets)
-        history.push(lastTweets[l]);
-
-    history.sort(function(a, b)
-    { return new Date(b.created_at) - new Date(a.created_at); });
-
-    twitter.stream(tracks, function(tweet)
+    refreshHistory++;
+    if(refreshHistory == tracks.length)
     {
-        io.sockets.emit('new tweet',
+        twitter.stream(tracks, function(tweet)
         {
-            id          : tweet.id_str,
-            text        : tweet.text,
-            created_at  : tweet.created_at,
-            user        : {screen_name : tweet.user.screen_name},
-            place       : tweet.place
+            io.sockets.emit('new tweet',
+            {
+                id          : tweet.id_str,
+                text        : tweet.text,
+                created_at  : tweet.created_at,
+                user        : {screen_name : tweet.user.screen_name},
+                place       : tweet.place
+            });
         });
-    });
 
-    io.sockets.on("connection", function(socket)
-    {
-        if (users.indexOf(socket.id) === -1)
-            users.push(socket.id);
-
-        socket.emit('tweets history', history);
-        logConnectedUsers();
-
-        socket.on("disconnect", function(o)
+        io.sockets.on("connection", function(socket)
         {
-            var index = users.indexOf(socket.id);
-            if(index != -1)
-                users.splice(index, 1);
+            if (users.indexOf(socket.id) === -1)
+                users.push(socket.id);
+
+            db.find({}, function(err, history)
+            {
+                history.sort(function(a, b)
+                { return new Date(b.created_at) - new Date(a.created_at); });
+
+                socket.emit('tweets history', history);
+            });
+
+            logConnectedUsers();
+
+            socket.on("disconnect", function(o)
+            {
+                var index = users.indexOf(socket.id);
+                if(index != -1)
+                    users.splice(index, 1);
+            });
         });
-    });
+    }
 });
 
 function logConnectedUsers()
