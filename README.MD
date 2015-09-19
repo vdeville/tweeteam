@@ -7,16 +7,17 @@ Projet Hackathon n°2 : Réalisation d'une interface de relay de multiples compt
 3. Rendez vous dans le dossier "Server" et mettez à jour npm avec `npm update`
 4. Lancez le serveur : `node Server`
 5. Ouvrez l\'adresse : `http://localhost/tweeteam/Public`
-6. 
+
 ## Utilisation
 TODO
+
 ## Contribuer
 1. Créez un fork
 2. Créer une nouvelle branche ave votre feature: `git checkout -b my-new-feature`
 3. Faites un commit : `git commit -am 'Add some feature'`
 4. Poussez sur la branche `git push origin my-new-feature`
 5. Envoyez nous un pull request ! :D
-6. 
+
 ## Credits
 TODO
 
