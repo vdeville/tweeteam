@@ -1,9 +1,12 @@
 var Twitter = function(host, callback)
 {
-    this.host     = host;
-    this.callback = callback;
+    this.host     = host || null;
+    this.callback = callback || null;
     this.socket   = null;
-    this.init(callback);
+    this.randomAnimations = [ 'fadeInDown'];
+
+    if(typeof callback == 'function')
+        this.init(callback);
 
     return this;
 };
@@ -14,39 +17,61 @@ Twitter.prototype.init = function(callback)
     this.socket = io.connect(this.host);
     this.socket.on('tweets history', function(lastTweets)
     {
+        for(var tweet in lastTweets)
+        {
+            lastTweets[tweet].animation     = that.addRandomAnimation();
+            lastTweets[tweet].text          = that.parseUrls(lastTweets[tweet].text);
+            lastTweets[tweet].original_date = lastTweets[tweet].created_at;
+            lastTweets[tweet].created_at    = that.parseDate(lastTweets[tweet].created_at);
+        }
+
         callback('history', lastTweets);
     });
 
-    this.socket.on('new tweet', function(data)
+    this.socket.on('new tweet', function(tweet)
     {
-        callback('new', data);
+        tweet.animation     = that.addRandomAnimation();
+        tweet.text          = that.parseUrls(tweet.text);
+        tweet.original_date = tweet.created_at;
+        tweet.created_at    = that.parseDate(tweet.created_at);
+
+        callback('new', tweet);
     });
 };
 
 
-Twitter.prototype.parseDate = function(tdate)
+Twitter.prototype.addRandomAnimation = function()
 {
-    var system_date = new Date(Date.parse(tdate));
-    var user_date = new Date();
-    if(K.ie) system_date = Date.parse(tdate.replace(/( \+)/, ' UTC$1'));
-
-    var diff = Math.floor((user_date - system_date) / 1000);
-    if (diff <= 0) { return "A l'instant";}
-    if (diff < 20) {return "il y a " + diff + " secondes";}
-    if (diff < 40) {return "il y a une minute";}
-    if (diff < 60) {return "il y a moins d'une minute";}
-    if (diff <= 90) {return "il y a une minute";}
-    if (diff <= 3540) {return "il y a " + Math.round(diff / 60) + " minutes";}
-    if (diff <= 5400) {return "il y a 1 heure";}
-    if (diff <= 86400) {return "il y a " + Math.round(diff / 3600) + " heures";}
-    if (diff <= 129600) {return "il y a 1 jour";}
-    if (diff < 604800) {return "il y a " + Math.round(diff / 86400) + " jours";}
-    if (diff <= 777600) {return "il y a 1 semaine";}
-
-    return system_date;
+    return this.randomAnimations[~~(Math.random() * this.randomAnimations.length)];
 };
 
-var K = function ()
+Twitter.prototype.parseUrls = function(text)
 {
-    return {ie: navigator.userAgent.match(/MSIE\s([^;]*)/)}
-}();
+    if(typeof text !== 'undefined')
+        return text.replace(/(https?:\/\/[^\s]+)/g, function(url)
+        { return '<a href="' + url + '" target="blank">' + url + '</a>'; });
+};
+
+Twitter.prototype.parseDate = function(created_at)
+{
+    var timeStamp   = new Date(Date.parse(created_at.replace(/( \+)/, ' UTC$1')));
+    var now         = new Date();
+    var secondsPast = (now.getTime() - timeStamp.getTime() + 35000) / 1000;
+
+    if(secondsPast <= 0)
+        return 'A l\'instant';
+    if(secondsPast < 60)
+        return ~~(secondsPast) + 's';
+    if(secondsPast < 3600)
+        return ~~(secondsPast/60) + 'm';
+    if(secondsPast <= 86400)
+        return ~~(secondsPast/3600) + 'h';
+
+    if(secondsPast > 86400)
+    {
+        var day   = timeStamp.getDate();
+        var month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ","");
+        var year  = timeStamp.getFullYear() == now.getFullYear() ? "" :  " "+timeStamp.getFullYear();
+        return day + " " + month + year;
+    }
+};
