@@ -24,6 +24,7 @@ $(function($)
 
             function showHistory(lastTweets, template)
             {
+                $('#tweet_list').empty();
                 for(var tweet in lastTweets)
                 {
                     lastTweets[tweet].animation = randomAnimations[~~(Math.random() * randomAnimations.length)];
