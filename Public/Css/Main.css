@@ -144,3 +144,37 @@ ul.tweet_share li a
         opacity: 0;
     }
 }
+
+
+
+.wrapper {
+    width: 50px;
+    margin: 20px auto;
+}
+
+svg {
+    width: 50px;
+    height: 50px;
+    stroke-width: 2;
+    fill: #5EA9DD;
+    stroke: #5EA9DD;
+    stroke-width: 1px;
+    animation: tweetloading 1s linear infinite;
+}
+
+@keyframes tweetloading {
+    0% {
+        stroke-dashoffset: 1200;
+        fill-opacity: 0.15;
+        stroke-width: 1px;
+    }
+    50% {
+        fill-opacity: 0.5;
+        stroke-width: 4px;
+    }
+    100% {
+        stroke-dashoffset: -1000;
+        fill-opacity: 0.15;
+        stroke-width: 1px;
+    }
+}
