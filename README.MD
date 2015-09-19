@@ -1,4 +1,4 @@
-# ${1:Tweeteam}
+# ${1:Project Name}
 Projet Hackathon n°2 : Réalisation d'une interface de relay de multiples comptes twitter en un seul flux, en live.
 ## Installation
 1. Clonez le dépot
