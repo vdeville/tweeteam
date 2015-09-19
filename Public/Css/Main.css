@@ -100,11 +100,11 @@ ul.tweet_share li a
 
 #waitingTweets
 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 30px;
+    width: 590px;
+    height: 36px;
+    line-height: 30px;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,0.1);
     text-align: center;
     z-index: 15000;
 }
@@ -171,7 +171,7 @@ ul.tweet_share li a
     fill: #5EA9DD;
     stroke: #5EA9DD;
     stroke-width: 1px;
-    animation: tweetloading 1s linear infinite;
+    animation: tweetloading 2s linear infinite;
 }
 
 @keyframes tweetloading {
