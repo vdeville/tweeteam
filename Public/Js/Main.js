@@ -43,7 +43,7 @@ $(function($)
                         if($('#waitingTweets').length > 0)
                             $('#waitingTweets').html(Mustache.render(waiting_tpl, { waitingTweets: sentence }));
                         else
-                            $('#tweet_list').prepend(Mustache.render(waiting_tpl, { waitingTweets: sentence }));
+                            $('#tweet_list').before(Mustache.render(waiting_tpl, { waitingTweets: sentence }));
                     });
                 }
                 else if(waitingTweets.length == 0)
@@ -62,10 +62,10 @@ $(function($)
                         .attr('transform', function(d)
                         {
                             return 'translate('+projection(
-                                [
-                                    d.longitude,
-                                    d.latitude
-                                ])+')'
+                            [
+                                d.longitude,
+                                d.latitude
+                            ])+')'
                         })
                         //.style('opacity', 0)
                         .attr("r", 5)
@@ -84,15 +84,19 @@ $(function($)
                     tweets.push(Mustache.render(template, tweet));
                 }
 
-                $(tweet_list).delegate('#showWaitingTweets', 'click', function(event)
+                $(document.body).delegate('#showWaitingTweets', 'click', function(event)
                 {
                     event.preventDefault();
+                    $(tweet_list).animate({scrollTop: 0}, 600);
+
                     var waiting = '';
                     for(var t in waitingTweets)
                         waiting += Mustache.render(template, waitingTweets[t]);
 
                     $('#waitingTweets').fadeOut(500, function(){ $(this).remove(); });
                     $(tweet_list).prepend(waiting);
+                    waitingTweets = [];
+                    newTweets = 0;
                 });
             }
 
@@ -118,9 +122,9 @@ $(function($)
     });
 });
 
+var twitter = new Twitter();
 setInterval(function()
 {
-    var twitter = new Twitter();
     $('.tweet_date').each(function(i, tweet)
     {
         $(tweet).text(twitter.parseDate($(tweet).attr('date')));
