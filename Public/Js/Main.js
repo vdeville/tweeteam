@@ -4,13 +4,14 @@ $(function($)
 
     Map.init(function(svg, projection)
     {
-        var waitingTweets    = [];
-        var newTweets        = 0;
-        var tweets           = [];
-        var current          = 0;
-        var flow_rate        = 2500;
-        var limit            = 100;
-        var randomAnimations = [ 'fadeInDown'];
+        var
+        waitingTweets    = [],
+        newTweets        = 0,
+        tweets           = [],
+        current          = 0,
+        flow_rate        = 2500,
+        limit            = 100,
+        tweet_list       = $('#tweet_list');
 
         $.get('Templates/tweet.html', function(template)
         {
@@ -24,20 +25,14 @@ $(function($)
 
             function showHistory(lastTweets, template)
             {
-                $('#tweet_list').empty();
+                $(tweet_list).empty();
                 for(var tweet in lastTweets)
-                {
-                    lastTweets[tweet].animation = randomAnimations[~~(Math.random() * randomAnimations.length)];
-                    lastTweets[tweet].text = parseUrls(lastTweets[tweet].text);
-                    lastTweets[tweet].original_date = lastTweets[tweet].created_at;
-                    lastTweets[tweet].created_at = parseDate(lastTweets[tweet].created_at);
-                    $('#tweet_list').append(Mustache.render(template, lastTweets[tweet]));
-                }
+                    $(tweet_list).append(Mustache.render(template, lastTweets[tweet]));
             }
 
             function addTweet(tweet, template)
             {
-                var scroll = $(window).scrollTop();
+                var scroll = $(tweet_list).scrollTop();
                 if(scroll > 0)
                 {
                     newTweets++;
@@ -53,11 +48,6 @@ $(function($)
                 }
                 else if(waitingTweets.length == 0)
                 {
-                    tweet.animation = randomAnimations[~~(Math.random() * randomAnimations.length)];
-                    tweet.text = parseUrls(tweet.text);
-                    tweet.original_date = tweet.created_at;
-                    tweet.created_at = parseDate(tweet.created_at);
-
                     if(tweet.place)
                     {
                         var coord =
@@ -93,31 +83,24 @@ $(function($)
 
                     tweets.push(Mustache.render(template, tweet));
                 }
-                else
-                {
-                    $('#showWaitingTweets').on('click', function(event)
-                    {
-                        event.preventDefault();
-                        var waiting = '';
-                        for(var t in waitingTweets)
-                            waiting += Mustache.render(template, waitingTweets[t]);
-                        $('#waitingTweets').html(waiting);
-                    });
-                }
-            }
 
-            function parseUrls(text)
-            {
-                if(typeof text !== 'undefined')
-                    return text.replace(/(https?:\/\/[^\s]+)/g, function(url)
-                    { return '<a href="' + url + '" target="blank">' + url + '</a>'; });
+                $(tweet_list).delegate('#showWaitingTweets', 'click', function(event)
+                {
+                    event.preventDefault();
+                    var waiting = '';
+                    for(var t in waitingTweets)
+                        waiting += Mustache.render(template, waitingTweets[t]);
+
+                    $('#waitingTweets').fadeOut(500, function(){ $(this).remove(); });
+                    $(tweet_list).prepend(waiting);
+                });
             }
 
             setInterval(function()
             {
                 if(tweets.length > 0)
                 {
-                    $('#tweet_list').prepend(tweets[current]);
+                    $(tweet_list).prepend(tweets[current]);
                     $(".tweet:not(:first)").animate({'margin-top': 0});
                     $('.tweet').css('margin-top', '0px');
                     $('.tweet').first().animate({'opacity': 1});
@@ -137,36 +120,9 @@ $(function($)
 
 setInterval(function()
 {
+    var twitter = new Twitter();
     $('.tweet_date').each(function(i, tweet)
     {
-        $(tweet).text(parseDate($(tweet).attr('date')));
+        $(tweet).text(twitter.parseDate($(tweet).attr('date')));
     })
 }, 1000);
-
-function parseDate(created_at)
-{
-    var timeStamp = new Date(Date.parse(created_at.replace(/( \+)/, ' UTC$1')));
-    var now = new Date();
-        secondsPast = ((now.getTime()) - timeStamp.getTime()+35000) / 1000;
-    if(secondsPast <= 0)
-    {
-        return 'A l\'instant';
-    }
-    if(secondsPast < 60){
-        return parseInt(secondsPast) + 's';
-    }
-    if(secondsPast < 3600){
-        return parseInt(secondsPast/60) + 'm';
-    }
-    if(secondsPast <= 86400){
-        return parseInt(secondsPast/3600) + 'h';
-    }
-    if(secondsPast > 86400){
-        day = timeStamp.getDate();
-        month = timeStamp.toDateString().match(/ [a-zA-Z]*/)[0].replace(" ","");
-        year = timeStamp.getFullYear() == now.getFullYear() ? "" :  " "+timeStamp.getFullYear();
-        return day + " " + month + year;
-    }
-
-};
-
