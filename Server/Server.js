@@ -17,8 +17,7 @@ tracks   =
 [
     {screen_name: 'fhollande',  count: 15},
     {screen_name: 'elysee',     count: 15},
-    {screen_name: 'elysee_com', count: 15},
-    {screen_name: 'vir4x',      count: 15}
+    {screen_name: 'elysee_com', count: 15}
 ];
 
 app.listen(port);
