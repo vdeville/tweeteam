@@ -15,6 +15,8 @@ body
     overflow-y: scroll;
     width: 590px;
     margin: 0 auto;
+    z-index: 10000;
+    position: relative;
 }
 
 #tweet_header
@@ -96,13 +98,23 @@ ul.tweet_share li a
     color: #ccc!important;
 }
 
-
+#waitingTweets
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    text-align: center;
+    z-index: 15000;
+}
 
 
 #map_svg
 {
     width: 100%;
     position: fixed;
+    z-index: -1;
 }
 
 
@@ -152,7 +164,7 @@ ul.tweet_share li a
     margin: 20px auto;
 }
 
-svg {
+#tweeter_loader {
     width: 50px;
     height: 50px;
     stroke-width: 2;
